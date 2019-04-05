@@ -64,7 +64,6 @@ public class UssdBind extends MessageBase {
             System.out.println(ex);
             //Logger.getLogger(UssdBind.class.getName()).log(Level.SEVERE, null, ex);
         }
-        logger.info("-------PARSE REQUEST MESSAGE----------");
         return byteArray;
     }
 

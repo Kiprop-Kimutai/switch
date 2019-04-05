@@ -54,6 +54,7 @@ public class UssdBindResp extends MessageBase {
         this.ReceiverCB = IntUtility.toInt(Arrays.copyOfRange(message, 16, 20));
 
         System.out.println();
+        logger.info("---------PARSE HEADER PARAMS-------------");
         logger.info("COMMAND LENGTH"+commandLength);
         logger.info("COMMAND ID==>"+commandID);
         logger.info("COMMAND STATUS==>"+commandStatus);
@@ -67,7 +68,19 @@ public class UssdBindResp extends MessageBase {
         return AccountName;
     }
 
-    public String getPassword() {return Password;}
+    //public String getPassword() {return Password;}
+
+    public CommandIDs getCommandID() {
+        return commandID;
+    }
+
+    public int getReceiverCB() {
+        return receiverCB;
+    }
+
+    public int getSenderCB() {
+        return receiverCB;
+    }
 
     public String getString() {
         return " MessageBase{" + "CommandLength=" + commandLength + ", CommandID=" + commandID + ", CommandStatus=" + commandStatus + ", SenderCB=" + senderCB + ", ReceiverCB=" + receiverCB + ", AccountName=" + AccountName + ", Password=" + Password + ", SystemType=" + SystemType + ", InterfaceVersion=" + InterfaceVersion + ", UssdVersion=" + UssdVersion + ", UssdOpType=" + UssdOpType + ", MsIsdn=" + MsIsdn + ", ServiceCode=" + ServiceCode + ", CodeScheme=" + CodeScheme + ", UssdString=" + UssdString + ", SwitchMode=" + SwitchMode + ", ChargeRatio=" + ChargeRatio + ", ChargeType=" + ChargeType + ", ChargeSource=" + ChargeSource + ", ChargeLocation=" + ChargeLocation + ", Message=" + Message + '}';

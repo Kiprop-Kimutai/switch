@@ -66,7 +66,7 @@ public class Client {
 
     public void connectToServer() {
         try {
-            logger.info("-----ussd bind request-------");
+            logger.info("-----------ussd bind request-------");
             logger.info(String.format("USSDC HOST ADDRESS=%s    PORT=%s  ", ussdcip, ussdcport));
             logger.info("MS USERNAME:==>"+testusername);
             logger.info("MS PASSWORD:==>"+password);
@@ -74,39 +74,44 @@ public class Client {
             //String requeststrr = new String(ussdBind.encode(testusername, password,"USSDBIND"));
             UssdBindResp ussdBindResp = new UssdBindResp(ussdBind.encode(testusername, password,"USSDBIND"));
             logger.info("ACCOUNT==>"+ussdBindResp.getAccountName());
-            logger.info("PASSWORD==>"+ussdBindResp.getPassword());
+           /* logger.info("---------------HEADER  PARAMS---------------");
             logger.info("COMMAND LENGTH"+ussdBindResp.getCommandLength());
             logger.info("COMMAND ID==>"+ussdBindResp.getCommandID());
             logger.info("SYSTEM TYPE"+ussdBindResp.getSystemType());
             logger.info("RECEIVER CB"+ussdBindResp.getReceiverCB());
-            logger.info("SENDER CB"+ussdBindResp.getSenderCB());
-            logger.info("BIND RESPONSE:==>"+ussdBindResp.getString());
-            //logger.info("----------------RAW STRING REQUEST------------"+requeststrr);
+            logger.info("SENDER CB"+ussdBindResp.getSenderCB());*/
+
+           /*logger.info("-----USSD BIND RESPONSE-----------------");
+           logger.info(ussdBindResp.getString());*/
             try {
                     Socket s = new Socket(ussdcip,Integer.parseInt(ussdcport));
                     s.setKeepAlive(true);
                     DataInputStream din = new DataInputStream(s.getInputStream());
                     DataOutputStream dout = new DataOutputStream(s.getOutputStream());
                     String requeststr = "", str2 = "", accountName = "";
-                    while(!str2.equals("stop")) {
+                    requeststr = new String(ussdBind.encode(testusername, password,"USSDBIND"));
+                    logger.info("----------------RAW STRING REQUEST------------"+requeststr);
+                dout.write(ussdBind.encode(testusername, password,"USSDBIND"));
+                //while(!str2.equals("stop")) {
                         byte[] resp = new byte[1024];
-                        requeststr = new String(ussdBind.encode(testusername, password,"USSDBIND"));
-                        logger.info("----------------RAW STRING REQUEST------------"+requeststr);
-                        dout.write(ussdBind.encode(testusername, password,"USSDBIND"));
+                        //requeststr = new String(ussdBind.encode(testusername, password,"USSDBIND"));
+                        //logger.info("----------------RAW STRING REQUEST------------"+requeststr);
+                        //dout.write(ussdBind.encode(testusername, password,"USSDBIND"));
                         dout.flush();
                         din.read(resp);
+                        logger.info("---------------------WATCH RESPONSE----------------");
                         str2 = new String(resp);
-                        accountName = new UssdBindResp(resp).getAccountName();
-                        //UssdBindResp ussdBindResp = new UssdBindResp(resp);
                         logger.info("-------------------RAW STRING RESPONSE-----------"+str2);
+                //accountName = new UssdBindResp(resp).getAccountName();
+                        UssdBindResp ussdBindRespp = new UssdBindResp(resp);
                         logger.info("--------------------USSSD BIND RESPONSE--------------------");
-                        logger.info("BIND RESPONSE:==>"+ussdBindResp.toString());
-                        logger.info("[account name]"+ussdBindResp.getAccountName());
-                        logger.info("system type"+ussdBindResp.getSystemType());
+                        logger.info("BIND RESPONSE:==>"+ussdBindRespp.getString());
+                        logger.info("[account name]"+ussdBindRespp.getAccountName());
+                        logger.info("system type"+ussdBindRespp.getSystemType());
                         System.out.println("Server says: "+accountName);
-                    }
-                    dout.close();
-                    s.close();
+                    //}
+                    //dout.close();
+                    //s.close();
                 }
                 catch(SocketException e){
                     System.out.println(e);

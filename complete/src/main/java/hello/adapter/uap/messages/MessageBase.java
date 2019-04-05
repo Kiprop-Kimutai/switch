@@ -101,7 +101,6 @@ public abstract class MessageBase {
 
             switch(command) {
                 case "USSDBIND":
-                    System.out.println("-------initialized--------");
                /* final byte[] commandID = {(byte)0x00,(byte)0x00, (byte)0x00, (byte)0x65};
                 final byte[] commandStatus = {(byte)0x00,(byte)0x00,(byte)0x00,(byte)0x00};
                 final byte[] senderCB = {(byte)0xFF,(byte)0xFF,(byte)0xFF,(byte)0xFF,(byte)0xFF,(byte)0xFF,(byte)0xFF,(byte)0xFF};
@@ -119,14 +118,12 @@ public abstract class MessageBase {
                 header.write(IntUtility.toByte(commandStatus));
                 header.write(IntUtility.toByte(senderCB));
                 header.write(IntUtility.toByte(receiverCB));
-                System.out.println("-------done--------");
                 break;
                 default:
                     break;
             }
             ByteArrayOutputStream message = new ByteArrayOutputStream();
             this.CommandLength = header.toByteArray().length + body.length + 4;
-            System.out.println("command length::"+this.CommandLength);
             message.write(IntUtility.toByte(header.toByteArray().length + body.length + 4));
             //System.out.println(header.toByteArray().length + body.length + 4);
             message.write(header.toByteArray());
@@ -151,8 +148,6 @@ public abstract class MessageBase {
     }
     protected boolean headerDecode(byte[]message) {
         try {
-            System.out.println("--------decoding-------");
-
             /*this.CommandLength = IntUtility.toInt(Arrays.copyOfRange(this.Message, 0, 4));
             this.CommandID = CommandIDs.fromInteger(IntUtility.toInt(Arrays.copyOfRange(this.Message, 4, 8)));
             this.CommandStatus = IntUtility.toInt(Arrays.copyOfRange(this.Message, 8, 12));
