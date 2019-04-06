@@ -8,12 +8,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.io.BufferedReader;
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.net.Socket;
 import java.net.SocketException;
+import java.util.Scanner;
 
 @RestController
 public class Client {
@@ -87,12 +85,15 @@ public class Client {
                     Socket s = new Socket(ussdcip,Integer.parseInt(ussdcport));
                     s.setKeepAlive(true);
                     DataInputStream din = new DataInputStream(s.getInputStream());
+                    Scanner sin = new Scanner(s.getInputStream());
                     DataOutputStream dout = new DataOutputStream(s.getOutputStream());
                     String requeststr = "", str2 = "", accountName = "";
+                    BufferedReader in = new BufferedReader(new InputStreamReader(s.getInputStream()));
                     requeststr = new String(ussdBind.encode(testusername, password,"USSDBIND"));
                     logger.info("----------------RAW STRING REQUEST------------"+requeststr);
-                dout.write(ussdBind.encode(testusername, password,"USSDBIND"));
+                    dout.write(ussdBind.encode(testusername, password,"USSDBIND"));
                 //while(!str2.equals("stop")) {
+                while(sin.hasNext()){
                         byte[] resp = new byte[1024];
                         //requeststr = new String(ussdBind.encode(testusername, password,"USSDBIND"));
                         //logger.info("----------------RAW STRING REQUEST------------"+requeststr);
@@ -100,7 +101,9 @@ public class Client {
                         dout.flush();
                         din.read(resp);
                         logger.info("---------------------WATCH RESPONSE----------------");
-                        str2 = new String(resp);
+                        //str2 = new String(resp);
+                        str2 = in.readLine();
+                        logger.info("-----str-----"+str2);
                         logger.info("-------------------RAW STRING RESPONSE-----------"+str2);
                 //accountName = new UssdBindResp(resp).getAccountName();
                         UssdBindResp ussdBindRespp = new UssdBindResp(resp);
@@ -109,7 +112,7 @@ public class Client {
                         logger.info("[account name]"+ussdBindRespp.getAccountName());
                         logger.info("system type"+ussdBindRespp.getSystemType());
                         System.out.println("Server says: "+accountName);
-                    //}
+                    }
                     //dout.close();
                     //s.close();
                 }
