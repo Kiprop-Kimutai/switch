@@ -85,24 +85,25 @@ public class Client {
                     Socket s = new Socket(ussdcip,Integer.parseInt(ussdcport));
                     s.setKeepAlive(true);
                     DataInputStream din = new DataInputStream(s.getInputStream());
-                    Scanner sin = new Scanner(s.getInputStream());
                     DataOutputStream dout = new DataOutputStream(s.getOutputStream());
-                    String requeststr = "", str2 = "", accountName = "";
-                    BufferedReader in = new BufferedReader(new InputStreamReader(s.getInputStream()));
+                    String requeststr = "", str2 = "xxx", accountName = "";
+                    //BufferedReader in = new BufferedReader(new InputStreamReader(s.getInputStream()));
                     requeststr = new String(ussdBind.encode(testusername, password,"USSDBIND"));
                     logger.info("----------------RAW STRING REQUEST------------"+requeststr);
                     dout.write(ussdBind.encode(testusername, password,"USSDBIND"));
+                    dout.flush();
+                    int i = 0;
                 //while(!str2.equals("stop")) {
-                while(sin.hasNext()){
-                        byte[] resp = new byte[1024];
-                        //requeststr = new String(ussdBind.encode(testusername, password,"USSDBIND"));
-                        //logger.info("----------------RAW STRING REQUEST------------"+requeststr);
-                        //dout.write(ussdBind.encode(testusername, password,"USSDBIND"));
-                        dout.flush();
+                  while(i<3){
+                      //dout.write(ussdBind.encode(testusername, password,"USSDBIND"));
+                      logger.info("LENGTH::"+din.toString().length());
+                      byte[] resp = new byte[din.toString().length()];
+                        //dout.flush();
                         din.read(resp);
                         logger.info("---------------------WATCH RESPONSE----------------");
-                        //str2 = new String(resp);
-                        str2 = in.readLine();
+                        logger.info("RESP LENGTH::"+resp.length);
+                      str2 = new String(resp);
+                        //str2 = in.readLine();
                         logger.info("-----str-----"+str2);
                         logger.info("-------------------RAW STRING RESPONSE-----------"+str2);
                 //accountName = new UssdBindResp(resp).getAccountName();
@@ -112,6 +113,10 @@ public class Client {
                         logger.info("[account name]"+ussdBindRespp.getAccountName());
                         logger.info("system type"+ussdBindRespp.getSystemType());
                         System.out.println("Server says: "+accountName);
+                      din = new DataInputStream(s.getInputStream());
+                      i++;
+                        //din.close();
+
                     }
                     //dout.close();
                     //s.close();

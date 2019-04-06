@@ -30,21 +30,27 @@ public class Server {
             ServerSocket ss = new ServerSocket(Integer.parseInt(ussdcport));
             Socket s = ss.accept();
             DataInputStream din = new DataInputStream(s.getInputStream());
-            DataOutputStream dout = new DataOutputStream(s.getOutputStream());
+           // DataOutputStream dout = new DataOutputStream(s.getOutputStream());
             BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
             String str = "",str1 = "", str2 = " USSDBEGINsessionsucwakala";
             byte[] bytess = new byte[57];
-            while(!str1.equals("stop")){
-                din.read(bytess);
-                str = new String(bytess);
-                logger.info("client says: "+str);
-                str1 = br.readLine();
+            int i = 0;
+            din.read(bytess);
+            str = new String(bytess);
+            logger.info("client says: "+str);
+            while(true){
+                //str1 = br.readLine();
+                DataOutputStream dout = new DataOutputStream(s.getOutputStream());
+                //str2 = String.format("%s%s",str2,Integer.toString(i));
                 dout.write(str2.getBytes());
+                //dout.write(Integer.toString(i).getBytes());
                 dout.flush();
+                dout.close();
+                i++;
             }
-            din.close();
-            s.close();
-            ss.close();
+            //din.close();
+            //s.close();
+            //ss.close();
         }
         catch (IOException e){
             e.printStackTrace();
