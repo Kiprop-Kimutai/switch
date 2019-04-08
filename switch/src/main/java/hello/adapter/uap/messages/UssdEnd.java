@@ -7,43 +7,21 @@ package hello.adapter.uap.messages;
  */
 
 
-
 import hello.adapter.uap.utility.StringUtility;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.util.Arrays;
 
 /**
  *
  * @author Ghasem Fattahpour
  */
-public class UssdContinue extends MessageBase {
+public class UssdEnd extends MessageBase {
 
-    public UssdContinue() {
-        this.CommandID = CommandIDs.UssdContinue;
-        this.UssdOpType = UssdOpTypes.Request;
-    }
-
-    public UssdContinue(byte[] message) {
-        this.Message = message;
-        this.dencode(message);
-        this.CommandID = CommandIDs.UssdBegin;
-    }
-
-    @Override
-    protected boolean dencode(byte [] message) {
-        super.dencode(message); //To change body of generated methods, choose Tools | Templates.
-
-        this.UssdVersion = UssdVersions.fromInteger(Arrays.copyOfRange(this.Message, 20, 21)[0]);
-        this.UssdOpType = UssdOpTypes.fromInteger(Arrays.copyOfRange(this.Message, 21, 22)[0]);
-        this.MsIsdn = StringUtility.GetCOctetStringFromBytes(Arrays.copyOfRange(this.Message, 22, 43));;
-        this.ServiceCode = 987;;
-        this.CodeScheme = CodeSchemes.fromInteger(Arrays.copyOfRange(this.Message, 47, 48)[0]);;
-        this.UssdString = StringUtility.GetCOctetStringFromBytes(Arrays.copyOfRange(this.Message, 48, this.CommandLength));
-
-        return true;
-
+    public UssdEnd() {
+        this.CommandID = CommandIDs.UssdEnd;
+        this.UssdOpType = UssdOpTypes.Response;
+        //ussdContinue.setUssdOpType(UssdOpTypes.Response);
     }
 
     public UssdVersions getUssdVersion() {
@@ -95,24 +73,26 @@ public class UssdContinue extends MessageBase {
     }
 
     @Override
-    public byte[] encode(String username,String password,String command) {
+    public byte[] encode() {
 
         byte[] byteArray = null;
         try {
-            ByteArrayOutputStream arrayOutputStream = new ByteArrayOutputStream();;;
+            ByteArrayOutputStream arrayOutputStream = new ByteArrayOutputStream();
 
             arrayOutputStream.write((byte) this.UssdVersion.getValue());
             arrayOutputStream.write((byte) this.UssdOpType.getValue());
-            arrayOutputStream.write(StringUtility.GetBytesFromCOctetString(this.MsIsdn, 21));;;
+            arrayOutputStream.write(StringUtility.GetBytesFromCOctetString(this.MsIsdn, 21));
             arrayOutputStream.write(StringUtility.GetBytesFromCOctetString(String.valueOf(this.ServiceCode), 4));
-            arrayOutputStream.write((byte) this.CodeScheme.toInt());;;
+            arrayOutputStream.write((byte) this.CodeScheme.toInt());
             arrayOutputStream.write(this.UssdString.getBytes("UTF-16"));
-            return this.generateMessage(arrayOutputStream.toByteArray(),command);
+            return this.generateMessage(arrayOutputStream.toByteArray());
 
         } catch (IOException ex) {
             System.out.println(ex);
         }
         return byteArray;
     }
+
+
 
 }

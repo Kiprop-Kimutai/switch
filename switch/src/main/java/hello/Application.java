@@ -1,21 +1,16 @@
 package hello;
 
 import hello.adapter.configs.ResourceConfig;
-import hello.adapter.sockets.Client;
 import hello.adapter.sockets.Server;
+import hello.adapter.sockets.Switch;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.autoconfigure.flyway.FlywayAutoConfiguration;
-import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.EnableAspectJAutoProxy;
-import org.springframework.core.env.Environment;
 
 import java.util.Properties;
 
@@ -24,12 +19,9 @@ public class Application extends SpringBootServletInitializer {
     @Autowired
     Server server;
     @Autowired
-    Client client;
+    Switch switchboard;
     private Logger logger = LoggerFactory.getLogger(Application.class);
-    /*@Override
-    protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {
-        return application.sources(Application.class).properties(getProperties());
-    }*/
+
     public static void main(String[] args) {
         //System.out.println("application base ###"+ResourceConfig.APPLICATION_PATH);
         SpringApplication.run(Application.class, args);
@@ -48,8 +40,23 @@ public class Application extends SpringBootServletInitializer {
     CommandLineRunner run(){
         return (String... args) ->{
             logger.info("Init......");
+            byte[] message = {};byte[] outputmessage = {};
+            switchboard.connectToServer();
             //server.openSocketConnection();
-            client.connectToServer();
+            //client.connectToServer();
+            /*for(int i = 0;i<8;i++) {
+                ThreaderTest threaderTest = new ThreaderTest(message,outputmessage);
+                threaderTest.start();
+
+            }*/
+
+  /*          Timer timer = new Timer();
+            timer.scheduleAtFixedRate(new TimerTask() {
+                    @Override
+                    public void run() {
+                      logger.info("logging.....");
+                    }
+                },10000,10000);*/
         };
     }
 

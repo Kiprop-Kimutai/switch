@@ -22,23 +22,31 @@ public class UssdBindResp extends MessageBase {
     private Logger logger = LoggerFactory.getLogger(UssdBindResp.class);
     int commandLength,commandStatus,senderCB,receiverCB;
     CommandIDs commandID;
+    byte [] messagee;
+    String AccountName;
     public UssdBindResp(byte[] message) {
         this.Message = message;
-        this.dencode(message);
+        this.dencode();
+        this.decode(message);
         customdecode(message);
         this.CommandID = CommandIDs.UssdUnBindResp;
     }
 
     @Override
-    protected boolean dencode(byte [] message) {
-        super.dencode(message); //To change body of generated methods, choose Tools | Templates.
-        this.AccountName = StringUtility.GetCOctetStringFromBytes(message, 20, 11);
-        this.Password = StringUtility.GetCOctetStringFromBytes(message,31,11);
+    protected boolean dencode() {
+        super.dencode(); //To change body of generated methods, choose Tools | Templates.
+        //this.AccountName = StringUtility.GetCOctetStringFromBytes(this.Message, 20, 11);
         return true;
         
     }
 
 
+    protected boolean decode(byte [] message) {
+        super.dencode(); //To change body of generated methods, choose Tools | Templates.
+        AccountName = StringUtility.GetCOctetStringFromBytes(message, 20, 11);
+        return true;
+
+    }
     protected void customdecode(byte [] message){
         commandLength = IntUtility.toInt(Arrays.copyOfRange(message, 0, 4));;
         commandID = CommandIDs.fromInteger(IntUtility.toInt(Arrays.copyOfRange(message, 4, 8)));
@@ -66,24 +74,6 @@ public class UssdBindResp extends MessageBase {
 
     public String getAccountName() {
         return AccountName;
-    }
-
-    //public String getPassword() {return Password;}
-
-    public CommandIDs getCommandID() {
-        return commandID;
-    }
-
-    public int getReceiverCB() {
-        return receiverCB;
-    }
-
-    public int getSenderCB() {
-        return receiverCB;
-    }
-
-    public String getString() {
-        return " MessageBase{" + "CommandLength=" + commandLength + ", CommandID=" + commandID + ", CommandStatus=" + commandStatus + ", SenderCB=" + senderCB + ", ReceiverCB=" + receiverCB + ", AccountName=" + AccountName + ", Password=" + Password + ", SystemType=" + SystemType + ", InterfaceVersion=" + InterfaceVersion + ", UssdVersion=" + UssdVersion + ", UssdOpType=" + UssdOpType + ", MsIsdn=" + MsIsdn + ", ServiceCode=" + ServiceCode + ", CodeScheme=" + CodeScheme + ", UssdString=" + UssdString + ", SwitchMode=" + SwitchMode + ", ChargeRatio=" + ChargeRatio + ", ChargeType=" + ChargeType + ", ChargeSource=" + ChargeSource + ", ChargeLocation=" + ChargeLocation + ", Message=" + Message + '}';
     }
     
     
