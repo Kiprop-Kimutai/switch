@@ -8,9 +8,11 @@ package hello.adapter.uap.messages;
 
 
 import hello.adapter.uap.utility.IntUtility;
+import org.slf4j.LoggerFactory;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.math.BigInteger;
 import java.util.Arrays;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -21,6 +23,7 @@ import java.util.logging.Logger;
  */
 public abstract class MessageBase {
 
+    private org.slf4j.Logger logger = LoggerFactory.getLogger(MessageBase.class);
     protected int CommandLength;
     protected CommandIDs CommandID = CommandIDs.NONE;
     protected int CommandStatus = 0;
@@ -119,6 +122,7 @@ public abstract class MessageBase {
             this.CommandStatus = IntUtility.toInt(Arrays.copyOfRange(this.Message, 8, 12));
             this.SenderCB = IntUtility.toInt(Arrays.copyOfRange(this.Message, 12, 16));
             this.ReceiverCB = IntUtility.toInt(Arrays.copyOfRange(this.Message, 16, 20));
+
             return true;
         } catch (Exception e) {
             return false;

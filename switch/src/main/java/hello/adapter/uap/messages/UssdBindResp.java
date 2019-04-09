@@ -43,7 +43,8 @@ public class UssdBindResp extends MessageBase {
 
     protected boolean decode(byte [] message) {
         super.dencode(); //To change body of generated methods, choose Tools | Templates.
-        AccountName = StringUtility.GetCOctetStringFromBytes(message, 20, 11);
+        //AccountName = StringUtility.GetCOctetStringFromBytes(message, 20, 11);
+        AccountName = StringUtility.GetCOctetStringFromBytes(message, 20, 6);
         return true;
 
     }

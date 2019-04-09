@@ -2,18 +2,26 @@ package hello.adapter.sockets;
 
 import hello.adapter.uap.messages.UssdBind;
 import hello.adapter.uap.messages.UssdBindResp;
+import hello.adapter.uap.messages.UssdShake;
+import hello.adapter.uap.messages.UssdShakeResp;
+import hello.adapter.uap.requests.ShakeReq;
 import hello.adapter.uap.requests.UssdBindReq;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.net.Socket;
 import java.net.SocketException;
+import java.util.Date;
+import java.util.Timer;
+import java.util.TimerTask;
 
 @RestController
 public class Switch {
@@ -32,43 +40,46 @@ public class Switch {
         UssdBindReq ussdBindReq;
         UssdBindResp ussdBindResp;
         public void connectToServer() {
-
             try {
                 Socket s = new Socket(ussdcip,Integer.parseInt(ussdcport));
+
                 s.setKeepAlive(true);;
                 DataOutputStream dout = new DataOutputStream(s.getOutputStream());
                 DataInputStream din = new DataInputStream(s.getInputStream());
+
                 String requeststr = "", str2 = "xxx", accountName = "";;
+                ShakeReq shakeReq = new ShakeReq(s,ussdcip,Integer.parseInt(ussdcport));
                 int bind = 0;
+                long previousTime = new Date().getTime();
+                int i = 0;
+                byte b[] = new byte[32768];
+                ussdBindReq.performUssdBind(dout,din);
                 while(true){
-                    //send bind only once
-                    if(bind ==0){
-                        //bind
-                        ussdBindReq.performUssdBind(dout,din);
-                        bind = 1;
+                    if(new Date().getTime() -previousTime >=10000) {
+                        shakeReq.performUssdShake(); //if shake fails;close connection and break;
+                        previousTime = new Date().getTime();
                     }
-                    else{
-                        //process all other requests including shake
-
-                    }
-
                     //one handler to process all input streams and write back
                     //bind =1;
+                    i++;
                 }
                 //dout.close();
                 //s.close();
             }
             catch(SocketException e){
+                logger.info(e.getMessage());
                 System.out.println(e);
+
                 //e.printStackTrace();
             }
             catch (IOException e) {
+                logger.info(e.getMessage());
                 System.out.println(e);
             }
 
 
 
     }
+
+
 }
-
-

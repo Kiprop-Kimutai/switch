@@ -18,6 +18,7 @@ public class UssdShake extends MessageBase {
 
     @Override
     public byte[] encode() {
+
         return this.generateMessage();
     }
 

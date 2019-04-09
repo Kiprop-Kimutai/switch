@@ -50,11 +50,11 @@ public class UssdBind extends MessageBase {
         try {
             ByteArrayOutputStream arrayOutputStream = new ByteArrayOutputStream();
 
-            arrayOutputStream.write(StringUtility.GetBytesFromCOctetString(String.format("%s\0",accountName), 11));
-            arrayOutputStream.write(StringUtility.GetBytesFromCOctetString(String.format("%s\0",password), 9));
-            arrayOutputStream.write(StringUtility.GetBytesFromCOctetString(this.SystemType, 13));
+            arrayOutputStream.write(StringUtility.GetCOctetStringFromBytes(accountName.getBytes(),0,accountName.length()).getBytes());
+            arrayOutputStream.write(StringUtility.GetCOctetStringFromBytes(password.getBytes(),0,password.length()).getBytes());
+            arrayOutputStream.write(StringUtility.GetCOctetStringFromBytes(this.SystemType.getBytes(),0,this.SystemType.length()).getBytes());
             arrayOutputStream.write(IntUtility.toByte(this.InterfaceVersion));
-            
+
             return this.generateMessage( arrayOutputStream.toByteArray());
             //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
         } catch (IOException ex) {

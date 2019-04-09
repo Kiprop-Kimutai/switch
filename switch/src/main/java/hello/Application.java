@@ -13,6 +13,8 @@ import org.springframework.boot.web.servlet.support.SpringBootServletInitializer
 import org.springframework.context.annotation.Bean;
 
 import java.util.Properties;
+import java.util.Timer;
+import java.util.TimerTask;
 
 @SpringBootApplication
 public class Application extends SpringBootServletInitializer {
@@ -50,7 +52,7 @@ public class Application extends SpringBootServletInitializer {
 
             }*/
 
-  /*          Timer timer = new Timer();
+   /*         Timer timer = new Timer();
             timer.scheduleAtFixedRate(new TimerTask() {
                     @Override
                     public void run() {
