@@ -70,10 +70,13 @@ public class Server {
                         }
                     }
                 },10000,10000);*/
-                if(send()){
+
+                dout.write(str2.getBytes(),0,str2.length());
+                dout.flush();
+               /* if(send()){
                    dout.write(str2.getBytes(),0,str2.length());
                    dout.flush();
-                }
+                }*/
                 //dout.flush();
                 i++;
             }

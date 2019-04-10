@@ -4,8 +4,11 @@ import hello.adapter.uap.messages.UssdBind;
 import hello.adapter.uap.messages.UssdBindResp;
 import hello.adapter.uap.messages.UssdShake;
 import hello.adapter.uap.messages.UssdShakeResp;
+import hello.adapter.uap.requests.Binder;
 import hello.adapter.uap.requests.ShakeReq;
+import hello.adapter.uap.requests.Shaker;
 import hello.adapter.uap.requests.UssdBindReq;
+import org.apache.tomcat.jni.Thread;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,31 +45,42 @@ public class Switch {
         public void connectToServer() {
             try {
                 Socket s = new Socket(ussdcip,Integer.parseInt(ussdcport));
-
-                s.setKeepAlive(true);;
                 DataOutputStream dout = new DataOutputStream(s.getOutputStream());
+                //DataOutputStream doutt = new DataOutputStream(s.getOutputStream());
+
                 DataInputStream din = new DataInputStream(s.getInputStream());
+                //DataInputStream dinn = new DataInputStream(s.getInputStream());
+
 
                 String requeststr = "", str2 = "xxx", accountName = "";;
-                ShakeReq shakeReq = new ShakeReq(s,ussdcip,Integer.parseInt(ussdcport));
+                //ShakeReq shakeReq = new ShakeReq(s,ussdcip,Integer.parseInt(ussdcport));
                 int bind = 0;
                 long previousTime = new Date().getTime();
                 int i = 0;
-                byte b[] = new byte[32768];
-                ussdBindReq.performUssdBind(dout,din);
-                while(true){
-                    if(new Date().getTime() -previousTime >=10000) {
-                        shakeReq.performUssdShake(); //if shake fails;close connection and break;
-                        previousTime = new Date().getTime();
-                    }
-                    //one handler to process all input streams and write back
-                    //bind =1;
-                    i++;
+                byte [] b = new byte[30];
+                //ussdBindReq.performUssdBind(dout,din);
+                byte [] bindresp = new byte[26];
+                byte [] ussdbindreq = ussdBindReq.perfomUssdBindTest();
+                dout.write(ussdbindreq);
+                dout.flush();
+                int x = din.read(bindresp);
+                logger.info("x value:"+x);
+                ussdBindReq.decodeUssdBindResp(bindresp);
+                /*Binder binder = new Binder(s,testusername,password);
+                binder.start();*/
+                Shaker  shakethread = new Shaker(s,din,dout);
+                shakethread.start();
+                byte [] resp =  new byte[256];
+                while(x>0){
+                    logger.info("response length:"+resp.length);
+                    x = din.read(resp);
+                    //call thread to process resp
                 }
                 //dout.close();
                 //s.close();
             }
             catch(SocketException e){
+                logger.info("------");
                 logger.info(e.getMessage());
                 System.out.println(e);
 

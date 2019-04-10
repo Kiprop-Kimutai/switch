@@ -43,4 +43,20 @@ public class UssdBindReq {
             System.out.println(e);
         }
     }
+
+    public byte[] perfomUssdBindTest() {
+        UssdBind ussdBind = new UssdBind(testusername,password);
+        logger.info("====>"+testusername);
+        logger.info("=====>"+password);
+        byte [] bindreq = ussdBind.encode();
+        return bindreq;
+    }
+
+    public void decodeUssdBindResp(byte [] bindresp) {
+        UssdBindResp ussdBindResp = new UssdBindResp(bindresp);
+        logger.info("account name"+ussdBindResp.getAccountName());
+        logger.info("command status"+ussdBindResp.getCommandStatus());
+    }
 }
+
+

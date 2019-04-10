@@ -32,6 +32,7 @@ public class ShakeReq {
         byte [] ussdshakereq = ussdShake.encode();
         logger.info("encoded successfully");
         byte[] ussdshakeresp = new byte[20];
+        //return ussdshakereq;
         try{
             Socket ss = new Socket(ussdcip,ussdcport);
             DataOutputStream dataOutputStream = new DataOutputStream(ss.getOutputStream());
@@ -54,6 +55,18 @@ public class ShakeReq {
             System.out.println(e);
             e.printStackTrace();
         }
+    }
+
+
+    public void shakerespshakeresp(byte[]shakeresp) {
+        UssdShakeResp ussdshakeResp = new UssdShakeResp(shakeresp);
+        logger.info("-----------USSD SHAKE RESPONSE--------------");
+        logger.info("COMMAND ID:::"+ussdshakeResp.getCommandID());
+        logger.info("COMMAND LENGTH:::"+ussdshakeResp.getCommandLength());
+        logger.info("COMMAND ID::"+ussdshakeResp.getCommandID());
+        logger.info("COMMAND STATUS::"+ussdshakeResp.getCommandStatus());
+        logger.info("SENDERCB==>"+ussdshakeResp.getSenderCB());
+        logger.info("RECEIVERCB==>"+ussdshakeResp.getSenderCB());
     }
 
 
