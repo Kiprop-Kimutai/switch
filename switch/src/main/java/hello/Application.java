@@ -1,6 +1,7 @@
 package hello;
 
 import hello.adapter.configs.ResourceConfig;
+import hello.adapter.sockets.EchoClient;
 import hello.adapter.sockets.Server;
 import hello.adapter.sockets.Switch;
 import org.slf4j.Logger;
@@ -22,6 +23,8 @@ public class Application extends SpringBootServletInitializer {
     Server server;
     @Autowired
     Switch switchboard;
+    @Autowired
+    EchoClient echoClient;
     private Logger logger = LoggerFactory.getLogger(Application.class);
 
     public static void main(String[] args) {
@@ -43,22 +46,10 @@ public class Application extends SpringBootServletInitializer {
         return (String... args) ->{
             logger.info("Init......");
             byte[] message = {};byte[] outputmessage = {};
+            //echoClient.start();
             switchboard.connectToServer();
             //server.openSocketConnection();
             //client.connectToServer();
-            /*for(int i = 0;i<8;i++) {
-                ThreaderTest threaderTest = new ThreaderTest(message,outputmessage);
-                threaderTest.start();
-
-            }*/
-
-   /*         Timer timer = new Timer();
-            timer.scheduleAtFixedRate(new TimerTask() {
-                    @Override
-                    public void run() {
-                      logger.info("logging.....");
-                    }
-                },10000,10000);*/
         };
     }
 

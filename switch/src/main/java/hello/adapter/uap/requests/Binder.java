@@ -1,9 +1,11 @@
 package hello.adapter.uap.requests;
 
+import hello.adapter.sockets.Switch;
 import hello.adapter.uap.messages.UssdBind;
 import hello.adapter.uap.messages.UssdBindResp;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -49,6 +51,7 @@ public class Binder extends Thread {
                     catch (IOException e) {
 
                     }
+
                 }
             },0,2000);
 

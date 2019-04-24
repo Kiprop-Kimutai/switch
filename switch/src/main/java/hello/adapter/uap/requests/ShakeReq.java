@@ -15,6 +15,7 @@ import java.net.Socket;
 import java.util.Date;
 import java.util.TimerTask;
 
+
 public class ShakeReq {
     private Logger logger = LoggerFactory.getLogger(ShakeReq.class);
     Socket s;
@@ -43,10 +44,10 @@ public class ShakeReq {
             UssdShakeResp ussdshakeResp = new UssdShakeResp(ussdshakeresp);
             logger.info("-----------USSD SHAKE RESPONSE--------------");
             logger.info("COMMAND ID:::"+ussdshakeResp.getCommandID());
-            logger.info("COMMAND LENGTH:::"+ussdshakeResp.getCommandLength());
+            logger.info("COMMAND LENGTH::::"+ussdshakeResp.getCommandLength());
             logger.info("COMMAND ID::"+ussdshakeResp.getCommandID());
             logger.info("COMMAND STATUS::"+ussdshakeResp.getCommandStatus());
-            logger.info("SENDERCB==>"+ussdshakeResp.getSenderCB());
+            logger.info("SENDERCB===>"+ussdshakeResp.getSenderCB());
             logger.info("RECEIVERCB==>"+ussdshakeResp.getSenderCB());
             inputStream.close();
             dataOutputStream.close();
@@ -62,9 +63,9 @@ public class ShakeReq {
         UssdShakeResp ussdshakeResp = new UssdShakeResp(shakeresp);
         logger.info("-----------USSD SHAKE RESPONSE--------------");
         logger.info("COMMAND ID:::"+ussdshakeResp.getCommandID());
-        logger.info("COMMAND LENGTH:::"+ussdshakeResp.getCommandLength());
+        logger.info("COMMAND LENGTH:::::"+ussdshakeResp.getCommandLength());
         logger.info("COMMAND ID::"+ussdshakeResp.getCommandID());
-        logger.info("COMMAND STATUS::"+ussdshakeResp.getCommandStatus());
+        logger.info("COMMAND STATUS:::"+ussdshakeResp.getCommandStatus());
         logger.info("SENDERCB==>"+ussdshakeResp.getSenderCB());
         logger.info("RECEIVERCB==>"+ussdshakeResp.getSenderCB());
     }
